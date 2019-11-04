@@ -1,6 +1,12 @@
-package uk.ac.soton.ecs.sr2u17.hybridimages;
+package hybridimages;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.openimaj.image.DisplayUtilities;
+import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
+import org.openimaj.image.processing.convolution.Gaussian2D;
 
 public class MyHybridImages {
 	/**
@@ -29,29 +35,38 @@ public class MyHybridImages {
 		int size = (int) (8.0f * lowSigma + 1.0f); // (this implies the window is +/- 4 sigmas from the centre of the Gaussian)
 		if (size % 2 == 0) size++; // size must be odd
 		
-		lowKernel = Gaussian2D.createKernelImage(size, lowSigma).pixels;
+		float[][] lowKernel = Gaussian2D.createKernelImage(size, lowSigma).pixels;
 		
-		lowImage.processInPlace(new MyConvolution(lowKernel));
+		lowImage.processInplace(new MyConvolution(lowKernel));
+		
+		DisplayUtilities.display(lowImage); //TEST
 		
 		size = (int) (8.0f * highSigma + 1.0f);
 		if (size % 2 == 0) size++;
 		
-		hLowKernel = Gaussian2D.createKernelImage(size, highSigma).pixels;
+		float[][] hLowKernel = Gaussian2D.createKernelImage(size, highSigma).pixels;
 		
 		MBFImage hLowPass = highImage.clone();
-		hLowPass.processInPlace(new MyConvolution(hLowKernel));
-		highImage.subtractInPlace(hLowPass);
+		hLowPass.processInplace(new MyConvolution(hLowKernel));
+		highImage.subtractInplace(hLowPass);
 		
-		return lowImage.addInPlace(highImage);
+		DisplayUtilities.display(highImage); //TEST
+		
+		return lowImage.addInplace(highImage);
 	}
 	
 	public static void main(String args[]){
 		
-		MBFImage lowImg = ImageUtilities.readMBF(new File());
-		MBFImage highImg = ImageUtilities.readMBF(new File());
-		
-		MBFImage hybrid = makeHybrid(lowImg, 4, highImg, 4);
-		
-		DisplayUtilities.display(hybrid);
+		try {
+			MBFImage highImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/cat.bmp"));
+			MBFImage lowImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/dog.bmp"));
+			
+			MBFImage hybrid = makeHybrid(lowImg, 4, highImg, 4);
+			
+			DisplayUtilities.display(hybrid);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
