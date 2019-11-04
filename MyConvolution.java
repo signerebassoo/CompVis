@@ -17,5 +17,24 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 		//
 		// hint: use FImage#internalAssign(FImage) to set the contents
 		// of your temporary buffer image to the image.
+		
+		FImage copy = image.clone();
+		copy.zero();
+		
+		int cols = image.width;
+		int rows = image.height;
+		
+		int kc = kernel.length;
+		int kr = kernel[0].length;
+		
+		int hkc = (int) Math.floor(kc/2);
+		int hkr = (int) Math.floor(kr/2);
+		
+		
+		
+		
+		
+		
+		image.internalAssign(copy);
 	}
 }
