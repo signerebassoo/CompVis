@@ -22,7 +22,7 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 		FImage copy = image.clone();
 		copy.zero();
 
-		int cols = image.width;
+		/*int cols = image.width;
 		int rows = image.height;
 
 		int kc = kernel.length;
@@ -76,7 +76,27 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 
 				copy.pixels[y][x] = sum;
 			}
-		}
+		}*/
+		
+		final int kh = kernel.height;
+		final int kw = kernel.width;
+		final int hh = kh / 2;
+		final int hw = kw / 2;
+				
+				for (int y = hh; y < image.height - (kh - hh); y++) {
+					for (int x = hw; x < image.width - (kw - hw); x++) {
+						float sum = 0;
+						for (int j = 0, jj = kh - 1; j < kh; j++, jj--) {
+							for (int i = 0, ii = kw - 1; i < kw; i++, ii--) {
+								final int rx = x + i - hw;
+								final int ry = y + j - hh;
+
+								sum += image.pixels[ry][rx] * kernel.pixels[jj][ii];
+							}
+						}
+						clone.pixels[y][x] = sum;
+					}
+				}
 		
 		
 
