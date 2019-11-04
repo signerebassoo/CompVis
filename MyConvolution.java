@@ -40,12 +40,25 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 			for(int kxRight = 0; kxRight < hkc; kxRight++){
 				for(int kyUp = 0; ky < hkr; kyUp++){
 					
+					if(kxRight + (hkc + cols) > hkc + cols || 
+						){
+						
+						pixel = 0; // Pretend there is 0-padding
+					}
+					else{
+						pixel = 1;
+					}
+					
+					sum += pixel * kernel[0][0];
 				}
 			}
 			
 			for(int kxLeft = 0; kxLeft > -hkc; kxLeft--){
 				for(int kyDown = 0; kyDown > -hkr; kyDown--){
 					
+					if((hkc + x) - kxLeft < hkc || kyDown + y > rows){
+						
+					}
 				}
 			}
 			
