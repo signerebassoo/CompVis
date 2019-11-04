@@ -37,18 +37,21 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 			float sum = 0; // Initialising template application sum
 			
 			// Loop through the template
+			for(int kxRight = 0; kxRight < hkc; kxRight++){
+				for(int kyUp = 0; ky < hkr; kyUp++){
+					
+				}
+			}
 			
-			
-			
+			for(int kxLeft = 0; kxLeft > -hkc; kxLeft--){
+				for(int kyDown = 0; kyDown > -hkr; kyDown--){
+					
+				}
+			}
 			
 			copy.pixels[y][x] = sum;
 			}
 		}
-		
-		
-		
-		
-		
 		
 		image.internalAssign(copy);
 	}
