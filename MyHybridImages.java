@@ -25,5 +25,33 @@ public class MyHybridImages {
 		//an instance of here if you so wish.
 		//Note that the input images are expected to have the same size, and the output
 		//image will also have the same height & width as the inputs.
+		
+		int size = (int) (8.0f * lowSigma + 1.0f); // (this implies the window is +/- 4 sigmas from the centre of the Gaussian)
+		if (size % 2 == 0) size++; // size must be odd
+		
+		lowKernel = Gaussian2D.createKernelImage(size, lowSigma).pixels;
+		
+		lowImage.processInPlace(new MyConvolution(lowKernel));
+		
+		size = (int) (8.0f * highSigma + 1.0f);
+		if (size % 2 == 0) size++;
+		
+		hLowKernel = Gaussian2D.createKernelImage(size, highSigma).pixels;
+		
+		MBFImage hLowPass = highImage.clone();
+		hLowPass.processInPlace(new MyConvolution(hLowKernel));
+		highImage.subtractInPlace(hLowPass);
+		
+		return lowImage.addInPlace(highImage);
+	}
+	
+	public static void main(String args[]){
+		
+		MBFImage lowImg = ImageUtilities.readMBF(new File());
+		MBFImage highImg = ImageUtilities.readMBF(new File());
+		
+		MBFImage hybrid = makeHybrid(lowImg, 4, highImg, 4);
+		
+		DisplayUtilities.display(hybrid);
 	}
 }

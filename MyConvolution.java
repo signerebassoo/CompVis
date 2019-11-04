@@ -30,6 +30,21 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 		int hkc = (int) Math.floor(kc/2);
 		int hkr = (int) Math.floor(kr/2);
 		
+		// Loop through the pixels of the convolution result
+		for(int x = 0; x < cols; x++){
+			for(int y = 0; y < rows; y++{
+			
+			float sum = 0; // Initialising template application sum
+			
+			// Loop through the template
+			
+			
+			
+			
+			copy.pixels[y][x] = sum;
+			}
+		}
+		
 		
 		
 		
