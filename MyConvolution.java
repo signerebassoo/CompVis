@@ -22,7 +22,7 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 		FImage copy = image.clone();
 		copy.zero();
 
-		/*int cols = image.width;
+		int cols = image.width;
 		int rows = image.height;
 
 		int kc = kernel.length;
@@ -34,74 +34,27 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 		// Loop through the pixels of the convolution result
 		for(int x = 0; x < cols; x++){
 			for(int y = 0; y < rows; y++){
-
-				float pixel = image.pixels[y][x];
-				float sum = pixel * kernel[hkr][hkc]; // Initialising template application sum with kernel middle pixel
-
-				// Loop through the template's pixels to the right and up from the centre
-				for(int kxRight = 1; kxRight <= hkc; kxRight++){
-					for(int kyUp = 1; kyUp <= hkr; kyUp++){
-
-						if(x + kxRight > cols - 1 || y - kyUp < 0){
-							pixel = 0; // Pretend there is 0-padding
-						}
-						else{
-							pixel = image.pixels[y - kyUp][x + kxRight];
-						}
-
-						int ky = hkr - kyUp;
-						int kx = hkc + kxRight;
-
-						sum += pixel * kernel[ky][kx];
-					}
-				}
-
-				// Loop through the template's pixels to the left and down from the centre
-				for(int kxLeft = 1; kxLeft <= hkc; kxLeft++){
-					for(int kyDown = 1; kyDown <= hkr; kyDown++){
-
-						if(x - kxLeft < 0 || y + kyDown > rows - 1){
+				
+				float sum = 0; float pixel;
+				
+				// Loop through the kernel
+				for(int r = -hkr; r <= hkr; r++) {
+					for(int c = -hkc; c <= hkc; c++) {
+						
+						if(x + c > cols - 1 || x + c < 0 || y + r > rows - 1 || y + r < 0) {
 							pixel = 0; // Pretend there is 0-padding
 						}
 						else {
-							pixel = image.pixels[y + kyDown][x - kxLeft];
+							pixel = image.pixels[y + r][x + c];
 						}
-
-						int ky = hkr + kyDown;
-						int kx = hkc - kxLeft;
-
-						sum += pixel * kernel[ky][kx];
-					}
-				}
-
-				copy.pixels[y][x] = sum;
-			}
-		}*/
-		
-		// DUMMY CODE BEGINS
-		final int kh = kernel[0].length;
-		final int kw = kernel.length;
-		final int hh = kh / 2;
-		final int hw = kw / 2;
-
-		for (int y = hh; y < image.height - (kh - hh); y++) {
-			for (int x = hw; x < image.width - (kw - hw); x++) {
-				
-				float sum = 0;
-				
-				for (int j = 0, jj = kh - 1; j < kh; j++, jj--) {
-					for (int i = 0, ii = kw - 1; i < kw; i++, ii--) {
 						
-						final int rx = x + i - hw;
-						final int ry = y + j - hh;
-
-						sum += image.pixels[ry][rx] * kernel[jj][ii];
+						sum += pixel * kernel[c + hkc][r + hkr];
 					}
 				}
+
 				copy.pixels[y][x] = sum;
 			}
 		}
-		// DUMMY CODE ENDS
 
 		image.internalAssign(copy);
 	}
