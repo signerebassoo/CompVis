@@ -14,33 +14,33 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 
 	@Override
 	public void processImage(FImage image) {
-		// convolve image with kernel and store result back in image
-		//
-		// hint: use FImage#internalAssign(FImage) to set the contents
-		// of your temporary buffer image to the image.
 
 		FImage copy = image.clone();
 		copy.zero();
 
+		// size of the original image
 		int cols = image.width;
 		int rows = image.height;
 
+		// size of the kernel
 		int kc = kernel.length;
 		int kr = kernel[0].length;
 
+		// amount of columns/rows from the centre of the kernel
 		int hkc = (int) Math.floor(kc/2);
 		int hkr = (int) Math.floor(kr/2);
 
-		// Loop through the pixels of the convolution result
+		// loop through the pixels of the image
 		for(int x = 0; x < cols; x++){
 			for(int y = 0; y < rows; y++){
 				
 				float sum = 0; float pixel;
 				
-				// Loop through the kernel
+				// loop through the kernel
 				for(int r = -hkr; r <= hkr; r++) {
 					for(int c = -hkc; c <= hkc; c++) {
 						
+						// if the kernel point is out of the image
 						if(x + c > cols - 1 || x + c < 0 || y + r > rows - 1 || y + r < 0) {
 							pixel = 0; // Pretend there is 0-padding
 						}

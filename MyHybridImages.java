@@ -32,12 +32,12 @@ public class MyHybridImages {
 		//Note that the input images are expected to have the same size, and the output
 		//image will also have the same height & width as the inputs.
 		
-		int size = (int) (8.0f * lowSigma + 1.0f); // (this implies the window is +/- 4 sigmas from the centre of the Gaussian)
+		int size = (int) (8.0f * lowSigma + 1.0f); // the window is +/- 4 sigmas from the centre of the Gaussian
 		if (size % 2 == 0) size++; // size must be odd
 		
 		float[][] lowKernel = Gaussian2D.createKernelImage(size, lowSigma).pixels;
 		
-		lowImage.processInplace(new MyConvolution(lowKernel));
+		lowImage.processInplace(new MyConvolution(lowKernel)); // produce low pass of the low image
 		
 		size = (int) (8.0f * highSigma + 1.0f);
 		if (size % 2 == 0) size++;
@@ -45,20 +45,21 @@ public class MyHybridImages {
 		float[][] hLowKernel = Gaussian2D.createKernelImage(size, highSigma).pixels;
 		
 		MBFImage hLowPass = highImage.clone();
-		hLowPass.processInplace(new MyConvolution(hLowKernel));
-		highImage.subtractInplace(hLowPass);
+		hLowPass.processInplace(new MyConvolution(hLowKernel)); // produce low pass of the high image
 		
-		return lowImage.addInplace(highImage);
+		highImage.subtractInplace(hLowPass); // produce high pass by subtracting its low pass
+		
+		return lowImage.addInplace(highImage); // return hybrid image by adding low and high
 	}
 	
 	public static void main(String args[]){
 		
 		try {
-			MBFImage highImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/rsz_potter.jpg"));
-			MBFImage lowImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/rsz_snow.jpg"));
+			MBFImage highImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/h.jpg"));
+			MBFImage lowImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/j.jpg"));
 			
-			MBFImage hybrid = makeHybrid(lowImg, 2, highImg, 2);
-			
+			MBFImage hybrid = makeHybrid(lowImg, 3, highImg, 3);
+			//hybrid.processInplace(new ResizeProcessor(100, 100, true));
 			DisplayUtilities.display(hybrid);
 			
 		} catch (IOException e) {
