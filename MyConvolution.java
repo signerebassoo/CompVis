@@ -1,4 +1,4 @@
-package hybridimages;
+package uk.ac.soton.ecs.sr2u17.hybridimages;
 
 import org.openimaj.image.FImage;
 import org.openimaj.image.processor.SinglebandImageProcessor;
@@ -7,8 +7,11 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 	
 	private float[][] kernel;
 
+	/**
+	 * Creates a convolution instance for the specified kernel/template.
+	 * @param kernel the template indexed by [row][column]
+	 */
 	public MyConvolution(float[][] kernel) {
-		//note that like the image pixels kernel is indexed by [row][column]
 		this.kernel = kernel;
 	}
 
@@ -42,7 +45,7 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 						
 						// if the kernel point is out of the image
 						if(x + c > cols - 1 || x + c < 0 || y + r > rows - 1 || y + r < 0) {
-							pixel = 0; // Pretend there is 0-padding
+							pixel = 0; // pretend there is 0-padding
 						}
 						else {
 							pixel = image.pixels[y + r][x + c];
@@ -52,10 +55,10 @@ public class MyConvolution implements SinglebandImageProcessor<Float, FImage> {
 					}
 				}
 
-				copy.pixels[y][x] = sum;
+				copy.pixels[y][x] = sum; // replace pixel with template application result
 			}
 		}
 
-		image.internalAssign(copy);
+		image.internalAssign(copy); // assign the processed result to the original image reference
 	}
 }
