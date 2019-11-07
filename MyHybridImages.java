@@ -39,8 +39,6 @@ public class MyHybridImages {
 		
 		lowImage.processInplace(new MyConvolution(lowKernel));
 		
-		DisplayUtilities.display(lowImage); //TEST
-		
 		size = (int) (8.0f * highSigma + 1.0f);
 		if (size % 2 == 0) size++;
 		
@@ -50,18 +48,16 @@ public class MyHybridImages {
 		hLowPass.processInplace(new MyConvolution(hLowKernel));
 		highImage.subtractInplace(hLowPass);
 		
-		DisplayUtilities.display(highImage); //TEST
-		
 		return lowImage.addInplace(highImage);
 	}
 	
 	public static void main(String args[]){
 		
 		try {
-			MBFImage highImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/cat.bmp"));
-			MBFImage lowImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/dog.bmp"));
+			MBFImage highImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/rsz_potter.jpg"));
+			MBFImage lowImg = ImageUtilities.readMBF(new File("C:/Users/Ioana/Desktop/Signe/OpenIMAJ-Tutorial01/src/main/java/hybridimages/data/rsz_snow.jpg"));
 			
-			MBFImage hybrid = makeHybrid(lowImg, 4, highImg, 4);
+			MBFImage hybrid = makeHybrid(lowImg, 2, highImg, 2);
 			
 			DisplayUtilities.display(hybrid);
 			
